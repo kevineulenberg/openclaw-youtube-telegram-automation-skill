@@ -4,7 +4,7 @@ This Codex skill documents and guides the setup of a duplicate-safe YouTube-to-T
 
 It is designed for workflows where a server checks configured YouTube channels, discovers the newest eligible video, fetches or recovers a transcript, asks OpenClaw to create exactly one Telegram-ready post, validates the output, sends it through the Telegram Bot API, and updates send state only after Telegram confirms success.
 
-![YouTube Telegram Automation Flowchart](example-flow-chart-yt-telegram-automation.png)
+![OpenClaw YouTube Telegram Automation Flowchart](openclaw-youtube-telegram-automation-flowchart.png)
 
 ## What The Skill Covers
 
@@ -55,7 +55,7 @@ systemd --user timer
 - `references/setup-blueprint.md` - Fresh VPS setup blueprint with generic examples.
 - `references/operations.md` - Verification, troubleshooting, deployment, and recovery guidance.
 - `references/prompt-contracts.md` - OpenClaw prompt contracts, Telegram validation rules, and diagram prompt.
-- `example-flow-chart-yt-telegram-automation.png` - Visual architecture overview.
+- `openclaw-youtube-telegram-automation-flowchart.png` - Visual architecture overview.
 
 ## Intended Use
 
