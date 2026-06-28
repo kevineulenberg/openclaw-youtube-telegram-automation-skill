@@ -24,6 +24,14 @@ It is designed for workflows where a server checks configured YouTube channels, 
 - Handling blocked transcript recovery without letting the local Mac send messages or mark posts as sent.
 - Designing an optional weekly digest routine from already posted videos.
 
+## RapidAPI Transcript Fallback
+
+The skill can use the [RapidAPI YT API transcript endpoint](https://rapidapi.com/ytjar/api/yt-api/playground/apiendpoint_db971936-ab8b-4a5b-bc78-539e9a34c1eb) as a server-side transcript fallback when `youtube-transcript-api` cannot retrieve captions from the VPS.
+
+RapidAPI free plans can provide 300 requests per month per API key. This skill supports two RapidAPI keys in the fallback chain, which can raise the available free-plan transcript fallback capacity to 600 requests per month when both keys are configured on free plans.
+
+Thanks to [@chrisboden](https://github.com/chrisboden) for the tip about using RapidAPI as an additional transcript fallback.
+
 ## Core Safety Model
 
 The VPS is the source of truth. It owns discovery, state, generation, Telegram sending, and final send-state updates.
