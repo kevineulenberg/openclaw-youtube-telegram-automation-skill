@@ -1,0 +1,6 @@
+interface:
+  display_name: "YouTube Telegram Automation"
+  short_description: "Build OpenClaw YouTube-to-Telegram automations"
+  default_prompt: "Use $skill-yt-telegram to design or implement a generic OpenClaw VPS YouTube-to-Telegram automation with transcript fallbacks and duplicate-safe Telegram posting."
+policy:
+  allow_implicit_invocation: true
