@@ -140,6 +140,40 @@ Check:
 - monitor state is updated after successful send,
 - no local fallback process writes `sent`.
 
+### Post File Missing After Transcript Success
+
+If transcript fetching succeeds but validation fails with `Telegram post file
+does not exist`, check for a workspace/CWD path mismatch.
+
+Symptoms:
+
+- transcript source succeeded, often RapidAPI,
+- pending item has `transcriptStatus=transcript_ready`,
+- expected path under `YOUTUBE_AGENT_DIR/data/youtube-blogger/...` is missing,
+- accidental files exist under the service working directory, for example
+  `/home/openclaw/.openclaw/workspace/scripts/data/youtube-blogger/...`.
+
+Minimal recovery:
+
+```bash
+legacy=/home/openclaw/.openclaw/workspace/scripts/data/youtube-blogger
+target=/home/openclaw/.openclaw/workspace/youtube-api-agent/data/youtube-blogger
+mkdir -p "$target"
+cp -a -n "$legacy/." "$target/"
+mv "$legacy" "$legacy.legacy-$(date -u +%Y%m%dT%H%M%SZ)"
+```
+
+Then run:
+
+```bash
+/home/openclaw/.openclaw/workspace/youtube-api-agent/.venv/bin/python \
+  /home/openclaw/.openclaw/workspace/scripts/youtube_telegram_post.py --dry-run
+```
+
+Only run the normal poster after the dry-run confirms the pending item can be
+generated. Never mark the item as sent manually unless you have verified a
+Telegram `message_id`.
+
 ### Secrets In Agent Environment
 
 Before spawning OpenClaw agent, remove at least:

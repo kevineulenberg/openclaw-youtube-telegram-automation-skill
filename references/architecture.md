@@ -136,6 +136,12 @@ data/youtube-blogger/<channel>/<video>/metadata.json
 data/vault-mirror/Youtube Blogger/<channel>/Transcripts/<video>.md
 ```
 
+Keep send-state paths relative to the agent workspace for portability, but
+resolve every filesystem read/write against `YOUTUBE_AGENT_DIR`. Do not let
+`systemd` `WorkingDirectory` decide where `data/youtube-blogger` is written.
+For example, write to `agent_dir / transcriptPath`, not plain
+`Path(transcriptPath)`.
+
 Keep metadata additive. For RapidAPI transcripts, include:
 
 ```json
@@ -145,10 +151,16 @@ Keep metadata additive. For RapidAPI transcripts, include:
 ```
 
 Retain transcript Markdown files for a bounded period, for example 14 days. Protect files referenced by pending state. Do not delete Telegram post files, metadata, or send-state.
+Protection must cover both project transcript paths and vault-mirror transcript
+paths; absolute paths are acceptable only when they resolve under
+`YOUTUBE_AGENT_DIR`.
 
 ### OpenClaw Generation Layer
 
 OpenClaw receives the ready transcript and writes exactly one Telegram post file.
+Ensure the target Telegram post parent directory exists before spawning
+OpenClaw, including when a previously blocked transcript was recovered by the
+Mac fallback.
 
 Security rule: do not pass unrelated secrets to the OpenClaw child process. Strip at least:
 

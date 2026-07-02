@@ -106,6 +106,11 @@ ExecStart=/home/openclaw/.openclaw/workspace/youtube-api-agent/.venv/bin/python 
 TimeoutStartSec=30min
 ```
 
+The service may run from `workspace/scripts`, so the orchestrator must not write
+project files with process-CWD-relative paths. Keep paths stored in state as
+relative values such as `data/youtube-blogger/...`, but write and read them as
+`Path(YOUTUBE_AGENT_DIR) / relative_path`.
+
 Timer:
 
 ```ini
@@ -149,13 +154,18 @@ The orchestrator should implement:
 - baseline initialization to avoid posting pre-go-live videos,
 - transcript fetch via the fallback chain,
 - blocked pending state when transcripts fail,
+- project transcript/metadata/post paths resolved against `YOUTUBE_AGENT_DIR`,
+  not `os.getcwd()` or the systemd working directory,
+- target Telegram post parent directory created before invoking OpenClaw,
+  including recovered `transcriptStatus=blocked` items,
 - OpenClaw child process with secret-stripped environment,
 - post validation before Telegram send,
 - `send_in_flight` before Telegram request,
 - `sent` only after Telegram success,
 - `uncertain` on ambiguous send failures,
 - monitor-state update after successful send,
-- transcript retention cleanup.
+- transcript retention cleanup that protects pending-referenced project and
+  vault transcript paths.
 
 ## RapidAPI Transcript Normalization
 

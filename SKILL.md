@@ -15,6 +15,7 @@ Use this skill to help a user recreate the Financial-Advice-style YouTube-to-Tel
 - Treat the local Mac/Codex automation as recovery only: it may fetch captions and upload transcript files, but must not send Telegram messages or mark videos as sent.
 - Preserve duplicate safety: write send-state only after Telegram success, and use `send_in_flight`/`uncertain` states for ambiguous sends.
 - Keep RapidAPI as a transcript fallback only, not a discovery mechanism.
+- Keep workspace file writes independent from `systemd` `WorkingDirectory`: store state paths relative to `YOUTUBE_AGENT_DIR`, but resolve reads and writes with `agent_dir / relative_path`.
 
 ## Reference Routing
 
@@ -58,6 +59,7 @@ When asked to implement, prefer:
 - `systemd --user` timers over classic cron.
 - One deterministic Python orchestrator script per routine.
 - JSON state files for idempotency and manual recovery.
+- Agent-workspace-relative storage paths, never process-CWD-relative storage writes.
 - Strict env files for secrets.
 - `yt-dlp` for `standard_uploads` discovery where RSS/handles are insufficient.
 - `youtube-transcript-api` first, RapidAPI second, and local Mac `yt-dlp` captions last.
